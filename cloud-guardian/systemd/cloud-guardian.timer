@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Cloud Guardian every 15 minutes
+Requires=cloud-guardian.service
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target

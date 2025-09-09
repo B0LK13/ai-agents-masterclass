@@ -1,0 +1,16 @@
+[Unit]
+Description=Cloud Guardian VPS Security Agent
+After=network.target
+Wants=network.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/local/bin/cloud-guardian
+EnvironmentFile=/etc/cloud-guardian/env
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
