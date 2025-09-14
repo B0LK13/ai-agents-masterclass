@@ -1,0 +1,68 @@
+# Cloud Guardian Configuration Template
+# Copy this to /etc/cloud-guardian.yaml on your VPS
+
+# SSH Configuration
+ssh:
+  port: 22
+  permit_root_login: "no"
+  password_auth: "no"
+  max_auth_tries: 3
+  client_alive_interval: 300
+  client_alive_count_max: 2
+  # IPv6 address to allow SSH access (update with your actual client IPv6)
+  ipv6_allow: "YOUR_CLIENT_IPV6/128"
+
+# Firewall Configuration - Only allow ports 80/443 publicly, SSH restricted
+firewall:
+  allowed_ports:
+    - "80/tcp"      # HTTP
+    - "443/tcp"     # HTTPS
+  # SSH will be restricted to specific IPs only
+
+# Fail2ban Configuration
+fail2ban:
+  ban_time: 3600        # 1 hour
+  find_time: 600        # 10 minutes
+  max_retry: 3
+  ssh_max_retry: 3
+
+# Docker Security Configuration
+docker:
+  enabled: true
+  secure_daemon: true
+
+# Cloudflare Configuration
+cloudflare:
+  zone_id: "YOUR_CLOUDFLARE_ZONE_ID"  # Get this from Cloudflare dashboard
+  dns_records:
+    - name: "n8n.vps.bolk.dev"
+      type: "A"
+      ttl: 300
+      content: "31.97.47.51"  # VPS IPv4 address
+  ssl:
+    mode: "full"              # Enforce full SSL
+    always_use_https: true
+    min_tls_version: "1.2"
+    hsts_enabled: true
+    hsts_max_age: 31536000
+
+# Monitoring Configuration
+monitoring:
+  log_retention_days: 30
+  alert_email: "admin@bolk.dev"
+  
+# System Updates
+updates:
+  auto_security_updates: true
+  reboot_if_required: false
+
+# Security Policies
+security:
+  # Restrict SSH to specific IPs only
+  ssh_allowed_ips:
+    - "YOUR_CLIENT_IPV4/32"
+    - "YOUR_CLIENT_IPV6/128"
+  
+  # Additional hardening
+  disable_unused_services: true
+  kernel_hardening: true

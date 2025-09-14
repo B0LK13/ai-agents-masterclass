@@ -1,0 +1,68 @@
+# Cloud Guardian Production Configuration
+# Configured with your specific values
+
+# SSH Configuration
+ssh:
+  port: 22
+  permit_root_login: "no"
+  password_auth: "no"
+  max_auth_tries: 3
+  client_alive_interval: 300
+  client_alive_count_max: 2
+  # Your specific IPv6 address for SSH access
+  ipv6_allow: "2a02:a461:f84f:1:e135:2aca:e78e:63b1/128"
+
+# Firewall Configuration - Only 80/443 public, SSH restricted
+firewall:
+  allowed_ports:
+    - "80/tcp"      # HTTP
+    - "443/tcp"     # HTTPS
+  # SSH will be restricted to your specific IPv6 only
+
+# Fail2ban Configuration
+fail2ban:
+  ban_time: 3600        # 1 hour
+  find_time: 600        # 10 minutes
+  max_retry: 3
+  ssh_max_retry: 3
+
+# Docker Security Configuration
+docker:
+  enabled: true
+  secure_daemon: true
+  user_chain_policy: "DROP"
+
+# Cloudflare Configuration - Your specific zone
+cloudflare:
+  zone_id: "c58c15e45959a879f1309e92be02b07c"
+  dns_records:
+    - name: "n8n.vps.bolk.dev"
+      type: "A"
+      ttl: 300
+      content: "31.97.47.51"  # VPS IPv4 address
+  ssl:
+    mode: "strict"           # Strict SSL/TLS for maximum security
+    always_use_https: true
+    min_tls_version: "1.3"   # TLS 1.3 minimum
+    hsts_enabled: true
+    hsts_max_age: 31536000   # 1 year HSTS
+
+# Monitoring Configuration
+monitoring:
+  log_retention_days: 30
+  alert_email: "admin@bolk.dev"
+  
+# System Updates
+updates:
+  auto_security_updates: true
+  reboot_if_required: false
+
+# Security Policies
+security:
+  # Restrict SSH to your specific IPv6 only
+  ssh_allowed_ips:
+    - "2a02:a461:f84f:1:e135:2aca:e78e:63b1/128"
+  
+  # Additional hardening
+  disable_unused_services: true
+  kernel_hardening: true

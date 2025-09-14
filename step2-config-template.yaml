@@ -1,0 +1,59 @@
+# Cloud Guardian Configuration - Step 2 Template
+# Copy this to /etc/cloud-guardian.yaml
+
+# SSH Configuration with IPv6 client allow
+ssh:
+  port: 22
+  permit_root_login: "no"
+  password_auth: "no"
+  max_auth_tries: 3
+  client_alive_interval: 300
+  client_alive_count_max: 2
+  # UPDATE: Replace with your actual client IPv6
+  ipv6_allow: "YOUR_CLIENT_IPV6/128"
+
+# Firewall Configuration - Only 80/443 public
+firewall:
+  allowed_ports:
+    - "80/tcp"      # HTTP
+    - "443/tcp"     # HTTPS
+  # SSH restricted to specific IPs only
+
+# Fail2ban Configuration
+fail2ban:
+  ban_time: 3600        # 1 hour
+  find_time: 600        # 10 minutes
+  max_retry: 3
+  ssh_max_retry: 3
+
+# Docker Security with DOCKER-USER policy
+docker:
+  enabled: true
+  secure_daemon: true
+  user_chain_policy: "DROP"
+
+# Cloudflare Configuration
+cloudflare:
+  # UPDATE: Add your actual Cloudflare zone_id here
+  zone_id: ""
+  dns_records:
+    - name: "n8n.vps.bolk.dev"
+      type: "A"
+      ttl: 300
+      content: "31.97.47.51"
+  ssl:
+    mode: "strict"           # Strict SSL/TLS
+    always_use_https: true
+    min_tls_version: "1.3"   # TLS 1.3
+    hsts_enabled: true
+    hsts_max_age: 31536000
+
+# Monitoring Configuration
+monitoring:
+  log_retention_days: 30
+  alert_email: "admin@bolk.dev"
+  
+# System Updates
+updates:
+  auto_security_updates: true
+  reboot_if_required: false

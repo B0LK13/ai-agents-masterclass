@@ -1,0 +1,4 @@
+#!/bin/bash
+# Cloud Guardian executable wrapper
+source /opt/cloud-guardian/venv/bin/activate
+exec python3 /opt/cloud-guardian/cloud_guardian.py "$@"
