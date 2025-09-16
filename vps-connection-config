@@ -1,0 +1,66 @@
+# Cloud VPS Connection Configuration
+# Generated for connecting to your Cloud Guardian VPS
+
+# VPS Connection Details
+VPS_IPv4="31.97.47.51"
+VPS_IPv6="2a02:4780:41:f89c::1"
+VPS_USER="gebruiker"
+VPS_SSH_PORT="22"
+
+# Current Host Details
+CURRENT_HOST_IPv4="34.29.83.0"
+ALLOWED_IPv6="2a02:a461:f84f:1:e135:2aca:e78e:63b1/128"
+
+# SSH Connection Commands
+echo "🔗 Cloud VPS Connection Configuration"
+echo "====================================="
+echo "VPS IPv4: $VPS_IPv4"
+echo "VPS IPv6: $VPS_IPv6"
+echo "SSH User: $VPS_USER"
+echo "Current Host: $CURRENT_HOST_IPv4"
+echo ""
+
+# Connection Method 1: Direct SSH (if firewall allows)
+echo "Method 1: Direct SSH Connection"
+echo "ssh $VPS_USER@$VPS_IPv4"
+echo ""
+
+# Connection Method 2: IPv6 SSH (if available)
+echo "Method 2: IPv6 SSH Connection"
+echo "ssh -6 $VPS_USER@$VPS_IPv6"
+echo ""
+
+# Connection Method 3: Temporary Firewall Allow
+echo "Method 3: Temporary Firewall Allow (execute on VPS first)"
+echo "sudo ufw allow from $CURRENT_HOST_IPv4/32 to any port 22 proto tcp"
+echo "ssh $VPS_USER@$VPS_IPv4"
+echo "# After connection, remove temporary rule:"
+echo "sudo ufw delete allow from $CURRENT_HOST_IPv4/32 to any port 22 proto tcp"
+echo ""
+
+# SCP File Transfer Commands
+echo "SCP File Transfer Commands:"
+echo "# Upload to VPS:"
+echo "scp -r /local/path/ $VPS_USER@$VPS_IPv4:~/remote/path/"
+echo ""
+echo "# Download from VPS:"
+echo "scp -r $VPS_USER@$VPS_IPv4:~/remote/path/ /local/path/"
+echo ""
+
+# Cloud Guardian Management Commands
+echo "Cloud Guardian Management Commands (execute on VPS):"
+echo "# Check status"
+echo "systemctl status cloud-guardian.timer"
+echo ""
+echo "# View logs"
+echo "sudo tail -f /var/log/cloud-guardian.log"
+echo ""
+echo "# Test configuration"
+echo "cloud-guardian --test"
+echo ""
+echo "# Manual enforcement"
+echo "cloud-guardian --once --verbose"
+echo ""
+echo "# Check security status"
+echo "sudo ufw status verbose"
+echo "sudo fail2ban-client status sshd"
